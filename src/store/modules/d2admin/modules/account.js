@@ -23,10 +23,11 @@ export default {
       // uuid 是用户身份唯一标识 用户注册的时候确定 并且不可改变 不可重复
       // token 代表用户当前登录状态 建议在网络请求中携带 token
       // 如有必要 token 需要定时更新，默认保存一天
-      util.cookies.set('uuid', res.uuid)
-      util.cookies.set('token', res.token)
+      console.log('data', res.data)
+      util.cookies.set('uuid', res.data.id)
+      util.cookies.set('X-Token', res.data.token)
       // 设置 vuex 用户信息
-      await dispatch('d2admin/user/set', { name: res.name }, { root: true })
+      await dispatch('d2admin/user/set', { name: res.data.username }, { root: true })
       // 用户登录后从持久化数据加载一系列的设置
       await dispatch('load')
     },
@@ -41,7 +42,7 @@ export default {
        */
       async function logout () {
         // 删除cookie
-        util.cookies.remove('token')
+        util.cookies.remove('X-Token')
         util.cookies.remove('uuid')
         // 清空 vuex 用户信息
         await dispatch('d2admin/user/set', {}, { root: true })
