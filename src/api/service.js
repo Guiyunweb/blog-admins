@@ -15,7 +15,7 @@ function createService () {
     config => config,
     error => {
       // 发送失败
-      console.log(error)
+      console.log('error', error)
       return Promise.reject(error)
     }
   )
@@ -54,10 +54,14 @@ function createService () {
     },
     error => {
       const status = get(error, 'response.status')
+      console.log('status', status)
       if (!error.response.data.message) {
         switch (status) {
           case 400: error.message = '请求错误'; break
-          case 401: error.message = '未授权，请登录'; break
+          case 401:
+            error.message = '未授权，请登录'
+            util.cookies.remove('X-Token')
+            break
           case 403: error.message = '拒绝访问'; break
           case 404: error.message = `请求地址出错: ${error.response.config.url}`; break
           case 408: error.message = '请求超时'; break
@@ -88,7 +92,7 @@ function createRequestFunction (service) {
     const token = util.cookies.get('X-Token')
     const configDefault = {
       headers: {
-        Authorization: token,
+        'X-TOKEN': token,
         'Content-Type': get(config, 'headers.Content-Type', 'application/json')
       },
       timeout: 5000,

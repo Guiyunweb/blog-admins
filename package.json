@@ -26,6 +26,7 @@
     "lowdb": "^1.0.0",
     "nprogress": "^0.2.0",
     "screenfull": "^5.0.2",
+    "simplemde": "^1.11.2",
     "sortablejs": "^1.10.1",
     "ua-parser-js": "^0.7.20",
     "vue": "^2.6.11",
