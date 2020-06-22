@@ -18,12 +18,41 @@
       </el-form-item>
     </el-form>
     <el-drawer
-      title="文章设置"
+      :with-header="false"
       :visible.sync="drawer"
       >
       <el-form label-position="top" style="margin: 15px">
-        <el-form-item label="标题">
-          <el-input />
+        <el-form-item label="标签">
+           <el-select
+            v-model="article.tags"
+            style="width: 100%"
+            multiple
+            filterable
+            allow-create
+            default-first-option
+            placeholder="请选择文章标签">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="摘要">
+          <el-input
+            type="textarea"
+            :rows="3"
+            placeholder="请输入摘要"
+            v-model="article.summary">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="评论">
+          <el-switch
+            v-model="article.comments"
+            active-color="#13ce66"
+            inactive-color="#ff4949">
+          </el-switch>
         </el-form-item>
         <el-form-item label="缩略图">
           <el-upload
@@ -34,15 +63,18 @@
             :on-success="handleAvatarSuccess"
             action="http://47.100.105.136:8080/group1/upload"
             multiple>
-            <div v-if="!thumbnail">
-              <i class="el-icon-upload"></i>
+            <div v-if="!article.thumbnail">
+              <i class="el-icon-upload" style="width: 400px"></i>
               <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
             </div>
             <div v-else>
-              <img :src="'http://47.100.105.136:8080'+thumbnail" />
+              <img :src="'http://47.100.105.136:8080'+article.thumbnail+'?download=0'" style="object-fit:cover;width: 100%;height:100%" />
             </div>
           </el-upload>
         </el-form-item>
+        <div style="float: right;">
+          <el-button type="primary" @click="save(true)" size="small">发布</el-button>
+        </div>
       </el-form>
     </el-drawer>
   </d2-container>
@@ -59,15 +91,27 @@ export default {
         title: null,
         content: null,
         isRelease: false,
-        thumbnail: null
-      }
+        summary: null,
+        thumbnail: '',
+        comments: true,
+        tags: []
+      },
+      options: [{
+        value: 'HTML',
+        label: 'HTML'
+      }, {
+        value: 'CSS',
+        label: 'CSS'
+      }, {
+        value: 'JavaScript',
+        label: 'JavaScript'
+      }]
     }
   },
   methods: {
     save (isRelease) {
       this.article.isRelease = isRelease
       api.SAVE_ARTICLE(this.article).then(res => {
-        console.log(res)
         if (res.success) {
           this.$message({
             message: '保存成功',
@@ -77,7 +121,7 @@ export default {
       })
     },
     handleAvatarSuccess (res, file) {
-      this.thumbnail = res.path
+      this.article.thumbnail = res.path
     }
   }
 }

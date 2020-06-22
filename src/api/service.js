@@ -2,6 +2,7 @@ import axios from 'axios'
 import Adapter from 'axios-mock-adapter'
 import { get } from 'lodash'
 import util from '@/libs/util'
+import router from '@/router'
 import { errorLog, errorCreate } from './tools'
 
 /**
@@ -54,14 +55,14 @@ function createService () {
     },
     error => {
       const status = get(error, 'response.status')
-      console.log('status', status)
+      if(status===401){
+        util.cookies.remove('X-Token')
+        router.push({ name: 'login' })
+      }
       if (!error.response.data.message) {
         switch (status) {
           case 400: error.message = '请求错误'; break
-          case 401:
-            error.message = '未授权，请登录'
-            util.cookies.remove('X-Token')
-            break
+          case 401: error.message = '未授权，请登录'; break
           case 403: error.message = '拒绝访问'; break
           case 404: error.message = `请求地址出错: ${error.response.config.url}`; break
           case 408: error.message = '请求超时'; break
