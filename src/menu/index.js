@@ -35,6 +35,7 @@ export const menuAside = supplementPath([
     title: '文章',
     icon: 'edit',
     children: [
+      { path: '/article/list', title: '文章列表' },
       { path: '/article/edit', title: '写文章' }
     ]
   }

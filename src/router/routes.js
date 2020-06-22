@@ -31,6 +31,15 @@ const frameIn = [
         },
         component: _import('article/edit')
       },
+      {
+        path: 'article/list',
+        name: 'articleList',
+        meta: {
+          title: '文章列表',
+          auth: true
+        },
+        component: _import('article/list')
+      },
       // 系统 前端日志
       {
         path: 'log',

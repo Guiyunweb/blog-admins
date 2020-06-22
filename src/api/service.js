@@ -55,7 +55,7 @@ function createService () {
     },
     error => {
       const status = get(error, 'response.status')
-      if(status===401){
+      if (status === 401) {
         util.cookies.remove('X-Token')
         router.push({ name: 'login' })
       }

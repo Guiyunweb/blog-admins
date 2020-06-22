@@ -10,5 +10,13 @@ export default ({ request }) => ({
       method: 'post',
       data
     })
+  },
+  GET_LIST (data = {}) {
+    // 接口请求
+    return request({
+      url: '/posts/list',
+      method: 'get',
+      params: data
+    })
   }
 })
