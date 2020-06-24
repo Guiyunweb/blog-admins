@@ -18,5 +18,21 @@ export default ({ request }) => ({
       method: 'get',
       params: data
     })
+  },
+  GET_INFO (data = {}) {
+    // 接口请求
+    return request({
+      url: '/posts/getInfo',
+      method: 'get',
+      params: data
+    })
+  },
+  GET_DEL (data = {}) {
+    // 接口请求
+    return request({
+      url: '/posts/del',
+      method: 'get',
+      params: data
+    })
   }
 })

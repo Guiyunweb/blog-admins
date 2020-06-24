@@ -88,6 +88,7 @@ export default {
     return {
       drawer: false,
       article: {
+        id: null,
         title: null,
         content: null,
         isRelease: false,
@@ -108,7 +109,18 @@ export default {
       }]
     }
   },
+  mounted() {
+    if (this.$route.query.id) {
+      this.getData(this.$route.query.id);
+    }
+  },
   methods: {
+    getData (id) {
+      api.GET_INFO({id}).then(res => {
+        console.log(res)
+        this.article = res.data
+      })
+    },
     save (isRelease) {
       this.article.isRelease = isRelease
       api.SAVE_ARTICLE(this.article).then(res => {
@@ -117,6 +129,7 @@ export default {
             message: '保存成功',
             type: 'success'
           })
+          this.$router.push({ name: '/article/list' })
         }
       })
     },
