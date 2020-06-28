@@ -27,7 +27,7 @@ export default ({ request }) => ({
       params: data
     })
   },
-  GET_DEL (data = {}) {
+  DEL (data = {}) {
     // 接口请求
     return request({
       url: '/posts/del',

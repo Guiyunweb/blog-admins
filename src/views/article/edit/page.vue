@@ -12,9 +12,7 @@
       <el-input v-model="article.title" placeholder="请输入文章标题"></el-input>
       </el-form-item>
       <el-form-item>
-        <d2-mde
-        v-model="article.content"
-        class="mde"/>
+        <mavon-editor v-model="article.content" :boxShadow=false style="height: 100%"></mavon-editor>
       </el-form-item>
     </el-form>
     <el-drawer
@@ -82,15 +80,20 @@
 
 <script>
 import api from '@/api'
+import { mavonEditor } from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 export default {
   name: 'edit',
+  components: {
+    'mavon-editor': mavonEditor
+  },
   data () {
     return {
       drawer: false,
       article: {
         id: null,
         title: null,
-        content: null,
+        content: '',
         isRelease: false,
         summary: null,
         thumbnail: '',
@@ -109,14 +112,14 @@ export default {
       }]
     }
   },
-  mounted() {
+  mounted () {
     if (this.$route.query.id) {
-      this.getData(this.$route.query.id);
+      this.getData(this.$route.query.id)
     }
   },
   methods: {
     getData (id) {
-      api.GET_INFO({id}).then(res => {
+      api.GET_INFO({ id }).then(res => {
         console.log(res)
         this.article = res.data
       })
@@ -129,7 +132,7 @@ export default {
             message: '保存成功',
             type: 'success'
           })
-          this.$router.push({ name: '/article/list' })
+          this.$router.push({ path: '/article/list' })
         }
       })
     },

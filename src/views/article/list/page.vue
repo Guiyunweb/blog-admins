@@ -34,7 +34,17 @@
         <template slot-scope="scope">
           <div>
             <el-button type="text" @click="edit(scope.row.id)">编辑</el-button>
-            <el-button type="text" style="color: red" @click="del(scope.row.id)">删除</el-button>
+            <el-popover
+              placement="top"
+              width="160"
+              v-model="visible">
+              <p>这是否删除该文章？</p>
+              <div style="text-align: right; margin: 0">
+                <el-button size="mini" type="text" @click="visible = false">取消</el-button>
+                <el-button type="primary" size="mini"  @click="del(scope.row.id)">确定</el-button>
+              </div>
+              <el-button slot="reference" type="text" style="color: red;margin: 10px;">删除</el-button>
+            </el-popover>
           </div>
         </template>
       </el-table-column>
@@ -48,7 +58,8 @@ export default {
   name: 'articleList',
   data () {
     return {
-      tableData: []
+      tableData: [],
+      visible: false
     }
   },
   created () {
@@ -64,7 +75,15 @@ export default {
       this.$router.push({ path: 'edit', query: { id } })
     },
     del (id) {
-
+      this.visible = false
+      api.DEL({ id }).then(res => {
+        this.$notify({
+          title: '成功',
+          message: '删除成功',
+          type: 'success'
+        })
+        this.getList()
+      })
     }
   }
 
