@@ -94,7 +94,7 @@ export default {
         id: null,
         title: null,
         content: '',
-        isRelease: false,
+        issued: false,
         summary: null,
         thumbnail: '',
         comments: true,
@@ -125,7 +125,7 @@ export default {
       })
     },
     save (isRelease) {
-      this.article.isRelease = isRelease
+      this.article.issued = isRelease
       api.SAVE_ARTICLE(this.article).then(res => {
         if (res.success) {
           this.$message({
